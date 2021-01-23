@@ -210,6 +210,50 @@ function superUltraCurrier(func, ctx, numArgs) {
     }
 }
 
-Function.prototype.myCurry = function (ctx, numArgs) {
+// Function.prototype.myCurry = function (ctx, numArgs) {
     
+// }
+
+Function.prototype.myCall =  function (context, ...args) {
+    // return this.bind(context)(...args);
+    return this.bind(context, ...args)();
 }
+
+Function.prototype.myApply = function(context, argsArray = []) {
+    return this.bind(context)(...argsArray);
+}
+
+// superUltraCurrier.myApply
+
+// [].push(4)
+
+
+Array.prototype.quickSort = function(callback) {
+    if (this.length <= 1) return this;
+
+    if (!callback) {
+        callback = (a, b) => {
+            // return a < b ? -1 : (a > b ? 1 : 0);
+            return a < b ? -1 : 1;
+        }
+    }
+
+    const pivot = [this[0]];
+    let left = this.slice(1).filter(el => callback(el, pivot[0]) === -1 );
+    let right = this.slice(1).filter(el => callback(el, pivot[0]) !== -1);
+
+    left = left.quickSort(callback);
+    right = right.quickSort(callback);
+    // left = left.quickSort(); =>dont do this we need the callback to stay the same
+    // right = right.quickSort(); =>dont do this
+
+    return left.concat(pivot).concat(right);
+}
+
+const myArr = [7, 0, 4, 9, 2, 1];
+function reverse(a, b) {
+    return a > b ? -1 : 1;
+}
+
+// console.log(myArr.quickSort());
+// console.log(myArr.quickSort(reverse));
